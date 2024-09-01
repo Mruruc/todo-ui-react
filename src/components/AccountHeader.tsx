@@ -1,11 +1,10 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import AuthContext from "../auth/AuthContext";
-import { Button } from "bootstrap";
 
 const AccountHeader = () => {
   const { setToken } = useContext(AuthContext);
-  
+
   const logout = () => setToken(undefined);
 
   return (

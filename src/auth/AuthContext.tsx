@@ -1,6 +1,13 @@
 import { createContext } from "react";
 
-const AuthContext = createContext({
+export type SetTokenFunction = (token: string | undefined) => void;
+
+export interface AuthToken {
+  token: string | undefined;
+  setToken: SetTokenFunction;
+}
+
+const AuthContext = createContext<AuthToken>({
   token: undefined,
   setToken: () => {},
 });

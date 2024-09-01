@@ -5,7 +5,8 @@
 export const AUTHORIZATION = "Authorization";
 export const CONTENT_TYPE = "Content-Type";
 
-export function getHeader(headerMaps = new Map(), token = undefined) {
+export function setHeader(headerMaps: Map<string, string> = new Map(), 
+                          token: string | undefined = undefined): Headers {
   const headers = new Headers();
   headerMaps.size > 0 &&
     headerMaps.forEach((value, key) => headers.append(key, value));
@@ -13,6 +14,6 @@ export function getHeader(headerMaps = new Map(), token = undefined) {
   return headers;
 }
 
-export function validateToken(token) {
+export function validateToken(token: string) {
   if (!token) throw new Error("Token has falsy value!");
 }

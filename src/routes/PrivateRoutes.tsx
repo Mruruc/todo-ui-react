@@ -1,7 +1,7 @@
 import AppLayout from "../layouts/AppLayout";
 import NewTodo from "../pages/private/NewTodo";
 import TodoDetails from "../pages/private/TodoDetails";
-import Todos from "../pages/private/Todos";
+import ToDos from "../pages/private/ToDos";
 
 const privateRoutes = {
   path: "/to-do",
@@ -9,7 +9,7 @@ const privateRoutes = {
   children: [
     {
       index: true,
-      element: <Todos />,
+      element: <ToDos />,
     },
     {
       path: "new-todo",

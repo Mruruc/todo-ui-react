@@ -1,7 +1,7 @@
-import PublicLayout from "../layouts/PublicLayout.jsx";
-import HomePage from "../pages/public/HomePage.jsx";
-import LoginPage from "../pages/public/LoginPage.jsx";
-import SignUpPage from "../pages/public/SignUpPage.jsx";
+import PublicLayout from "../layouts/PublicLayout.js";
+import HomePage from "../pages/public/HomePage.js";
+import LoginPage from "../pages/public/LoginPage.js";
+import SignUpPage from "../pages/public/SignUpPage.js";
 
 
 const publicRoutes = {
