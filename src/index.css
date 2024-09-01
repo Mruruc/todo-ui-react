@@ -1,0 +1,16 @@
+.form-container {
+  max-width: 460px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+/* styles.css or equivalent */
+.main-container {
+  height: auto;
+  min-height: calc(100vh - 140px);
+}
+
+.account-main-container {
+  height: auto;
+  min-height: calc(100vh - 170px);
+}
