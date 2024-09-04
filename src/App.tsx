@@ -1,8 +1,8 @@
+import { useState } from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import AuthContext from "./auth/AuthContext";
 import privateRoutes from "./routes/PrivateRoutes";
 import publicRoutes from "./routes/PublicRoutes";
-import { useState } from "react";
-import AuthContext, { AuthToken } from "./auth/AuthContext";
 
 const route = createBrowserRouter([publicRoutes, privateRoutes]);
 
