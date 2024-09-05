@@ -10,6 +10,8 @@ RUN npm run build --prod
 
 FROM nginx:alpine as deployment
 COPY ../nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ../nginx/start.sh /start.sh
+RUN chmod +x /start.sh
 COPY --from=build-stage /app/dist /usr/share/nginx/html
 EXPOSE 80
-CMD [ "nginx","-g","daemon off;" ]
+CMD /start.sh
