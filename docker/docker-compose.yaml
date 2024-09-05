@@ -1,6 +1,6 @@
 services:
   todo-fronted:
-    image: mruruc/todo-ui:1.0.1
+    image: mruruc/todo-ui:1.0.2
     container_name: todo-ui
     ports:
       - "8080:80"
