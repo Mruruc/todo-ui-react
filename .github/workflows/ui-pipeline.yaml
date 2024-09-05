@@ -10,7 +10,7 @@ on:
             - nginx/nginx.conf
             - public/**
             - src/**
-            - *.json
+            - package.json
 
 jobs:
     build-image:
