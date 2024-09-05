@@ -34,9 +34,9 @@ jobs:
 
             - name: Build docker image 
               run: |
-                docker build --build-arg VITE_APP_API_URL=${{secrets.API_URL}} 
-                -t ${{secrets.DOCKERHUB_USERNAME}}/todo-ui:${{steps.extract_version.outputs.VERSION}}
-                -f docker/Dockerfile . 
+                docker build --build-arg VITE_APP_API_URL=${{secrets.API_URL}} \
+                -t ${{secrets.DOCKERHUB_USERNAME}}/todo-ui:${{steps.extract_version.outputs.VERSION}} \
+                -f docker/Dockerfile . \
 
             - name: Push image to regsitry
               run: docker push  ${{ secrets.DOCKERHUB_USERNAME }}/todo-ui:${{steps.extract_version.outputs.VERSION}}
