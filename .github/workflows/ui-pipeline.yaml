@@ -25,15 +25,16 @@ jobs:
 
             - name: Extract project version
               id: extract_version
-              run: apt-get install jq && |
-                   echo "VERSION=$(jq -r '.version' package.json )" >> $GITHUB_OUTPUT
+              run: |
+                apt-get update && apt-get install -y jq
+                echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
 
             - name: Login to Docker regsitery
               run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
 
             - name: Build docker image 
               run: |
-                docker build --build-arg VITE_APP_API_URL=${{secrets.API_URL}} -t ${{secrets.DOCKERHUB_USERNAME}}/todo-ui:${{secrets.GITHUB_TOKEN}} -f docker/Dockerfile . 
+                docker build --build-arg VITE_APP_API_URL=${{secrets.API_URL}} -t ${{secrets.DOCKERHUB_USERNAME}}/todo-ui:${{steps.extract_version.outputs.VERSION}} -f docker/Dockerfile . 
 
                  
 
