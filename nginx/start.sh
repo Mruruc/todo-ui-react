@@ -1,5 +1,7 @@
 #!/bin/sh
 
-sed -i 's/API_URL/${VITE_APP_API_URL}' /etc/nginx/nginx.conf
+# Replace the placeholder API_URL with the environment variable value
+sed -i 's|API_URL|'"${VITE_APP_API_URL}"'|' /etc/nginx/nginx.conf
 
-nginx -g "daemon off";
+# Start NGINX
+nginx -g "daemon off;"
