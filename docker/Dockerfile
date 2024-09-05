@@ -9,6 +9,7 @@ RUN npm run build --prod
 
 
 FROM nginx:alpine as deployment
+ENV VITE_APP_API_URL=${VITE_APP_API_URL}
 COPY ../nginx/nginx.conf /etc/nginx/nginx.conf
 COPY ../nginx/start.sh /start.sh
 RUN chmod +x /start.sh
