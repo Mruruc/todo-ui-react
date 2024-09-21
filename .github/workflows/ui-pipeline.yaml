@@ -28,10 +28,12 @@ jobs:
               with:
                 node-version: 20
 
-            - name: Instal dependencies & Build
+            - name: Install dependencies & Build
+              env:
+                VITE_APP_API_URL: ${{ secrets.API_URL }}
               run: |
-               VITE_APP_API_URL=${{secrets.API_URL}} npm install \ 
-               && npm run build --prod
+                npm install
+                npm run build --prod
 
             - name: Configure AWS credentials
               env: 
