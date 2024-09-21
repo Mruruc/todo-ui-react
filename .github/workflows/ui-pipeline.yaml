@@ -3,7 +3,7 @@ name: Todo Fronted Pipeline
 on:
     push:
         branches:
-            - master
+            - s3-production
         paths:
             - .github/**
             - docker/**
@@ -13,8 +13,8 @@ on:
             - package.json
 
 jobs:
-    build-image:
-        name: Build Docker Image
+    build-and-deploy:
+        name: Build and Deploy to AWS S3
         runs-on: ubuntu-latest
         steps:
           
@@ -23,23 +23,41 @@ jobs:
               with:
                 fetch-depth: 0
 
-            - name: Extract project version
-              id: extract_version
+            - name: Instal Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20
+
+            - name: Instal dependencies & Build
               run: |
-                apt-get update && apt-get install -y jq
-                echo "VERSION=$(jq -r '.version' package.json)" >> $GITHUB_OUTPUT
+               VITE_APP_API_URL=${{secrets.API_URL}} npm install \ 
+               && npm run build --prod
 
-            - name: Login to Docker regsitery
-              run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
-
-            - name: Build docker image 
+            - name: Configure AWS credentials
+              env: 
+                AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                AWS_REGION: ${{ secrets.AWS_REGION }}
               run: |
-                docker build --build-arg VITE_APP_API_URL=${{secrets.API_URL}} \
-                -t ${{secrets.DOCKERHUB_USERNAME}}/todo-ui:${{steps.extract_version.outputs.VERSION}} \
-                -f docker/Dockerfile . \
+                    mkdir -p ~/.aws
+                    echo "[default]" > ~/.aws/credentials
+                    echo "aws_access_key_id = $AWS_ACCESS_KEY_ID" >> ~/.aws/credentials
+                    echo "aws_secret_access_key = $AWS_SECRET_ACCESS_KEY" >> ~/.aws/credentials
+                    echo "[default]" > ~/.aws/config
+                    echo "region = $AWS_REGION" >> ~/.aws/config
 
-            - name: Push image to regsitry
-              run: docker push  ${{ secrets.DOCKERHUB_USERNAME }}/todo-ui:${{steps.extract_version.outputs.VERSION}}
+            - name: Sync to S3 
+              env: 
+                AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+              run: aws s3 sync dist/ s3://$AWS_S3_BUCKET --delete
+
+            - name: Cleanup AWS credentials
+              if: always()
+              run: |
+                rm -f ~/.aws/credentials
+                rm -f ~/.aws/config
+
+            
 
                  
 
