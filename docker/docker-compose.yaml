@@ -1,11 +1,14 @@
 services:
   todo-fronted:
-    image: mruruc/todo-ui:1.0.5
+    image: mruruc/todo-ui:1.0.6
     container_name: todo-ui
     ports:
       - "8080:80"
-    env_file:
-      - .env
+    environment:
+      - VITE_APP_API_URL=http://localhost:8083/api/v1/  
+
+   # env_file:
+     # - .env
 
 # docker build --build-arg VITE_APP_API_URL=http://localhost:8080/api/v1
 # -t todo/todo-ui:1.0.1 -f docker/Dockerfile .
