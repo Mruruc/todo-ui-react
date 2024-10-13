@@ -18,6 +18,8 @@ export async function postOrPutRequest<T>(
   method: "POST" | "PUT" = "POST"
 ): Promise<T | void> {
   
+  console.log(BASE_URL + url);
+  
   try {
     const response = await fetch(
       new Request(`${BASE_URL}${url}`, {

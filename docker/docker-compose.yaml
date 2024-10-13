@@ -1,11 +1,11 @@
 services:
   todo-fronted:
-    image: mruruc/todo-ui:1.0.6
+    image: mruruc/todo-ui:1.0.8
     container_name: todo-ui
     ports:
       - "8080:80"
     environment:
-      - VITE_APP_API_URL=http://localhost:8083/api/v1/  
+      - VITE_APP_API_URL=http://localhost:8083
 
    # env_file:
      # - .env
