@@ -8,7 +8,7 @@ import {
   setHeader,
 } from "./utility.js";
 
-const BASE_URL = import.meta.env.VITE_APP_API_URL;
+const BASE_URL = import.meta.env.VITE_APP_API_URL || "/api/v1"; 
 
 export async function postOrPutRequest<T>(
   url: string,
@@ -17,8 +17,6 @@ export async function postOrPutRequest<T>(
   token: string | undefined = undefined,
   method: "POST" | "PUT" = "POST"
 ): Promise<T | void> {
-  
-  console.log(BASE_URL + url);
   
   try {
     const response = await fetch(
