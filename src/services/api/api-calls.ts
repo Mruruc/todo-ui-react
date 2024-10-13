@@ -8,7 +8,7 @@ import {
   setHeader,
 } from "./utility.js";
 
-const BASE_URL = import.meta.env.VITE_APP_API_URL || "/api/v1"; 
+const BASE_URL = import.meta.env.VITE_APP_API_URL; 
 
 export async function postOrPutRequest<T>(
   url: string,
