@@ -7,6 +7,7 @@ import SignUpPage from "../pages/public/SignUpPage.js";
 const publicRoutes = {
   path: "/",
   element: <PublicLayout />,
+  error: <>404 Page</>,
   children: [
     {
       index: true,
