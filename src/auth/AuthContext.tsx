@@ -2,14 +2,16 @@ import { createContext } from "react";
 
 export type SetTokenFunction = (token: string | undefined) => void;
 
-export interface AuthToken {
+export interface AuthType {
   token: string | undefined;
   setToken: SetTokenFunction;
+  loading: boolean;
 }
 
-const AuthContext = createContext<AuthToken>({
+const AuthContext = createContext<AuthType>({
   token: undefined,
   setToken: () => {},
+  loading: false,
 });
 
 export default AuthContext;

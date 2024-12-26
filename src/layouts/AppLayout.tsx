@@ -5,14 +5,22 @@ import AccountHeader from "../components/AccountHeader";
 import Footer from "../components/Footer";
 
 const AppLayout = () => {
-  const { token } = useContext(AuthContext);
+  const { token, loading } = useContext(AuthContext);
+
   return (
     <>
-      <AccountHeader />
-      <main className="container mt-3 account-main-container">
-        {token ? <Outlet /> : <Navigate to={"/login"} />}
-      </main>
-      <Footer />
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        <>
+          <AccountHeader />
+          <main className="container mt-3 account-main-container">
+            {token ? <Outlet /> : <Navigate to={"/login"} />}
+            {/*  <Outlet /> */}
+          </main>
+          <Footer />
+        </>
+      )}
     </>
   );
 };

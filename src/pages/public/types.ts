@@ -10,7 +10,7 @@ export interface User {
 
 export interface ValidationError extends User {
   passwordMistMatch?: string;
-  description?: string;
+  message?: string;
 }
 
 export interface RegistrationFormComponentProps {

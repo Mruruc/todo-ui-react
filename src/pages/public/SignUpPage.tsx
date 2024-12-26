@@ -1,13 +1,15 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
+import AuthContext from "../../auth/AuthContext";
 import { postOrPutRequest } from "../../services/api/api-calls";
 import { passwordValidation } from "../../services/validations/validation-util";
-import { User, ValidationError } from "./types";
 import RegistrationForm from "./components/RegistrationForm";
+import { User, ValidationError } from "./types";
 
 const URI = "/auth/signup";
 
 const SignUpPage = () => {
+  const { token, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const [getUser, setUser] = useState<User>({
     firstName: "",
@@ -34,11 +36,15 @@ const SignUpPage = () => {
     passwordValidation(getUser.password, getUser.passwordRetype)
       ? postOrPutRequest<ValidationError>(URI, getUser)
           .then(() => navigate("/login", { replace: true }))
-          .catch((error) => {
-            error.errors ? setError(error.errors) : setError(error);
-          })
+          .catch((error) => setError(error))
       : setError({ passwordMistMatch: "Passwords mismatch!" });
   }
+
+  useEffect(() => {
+    token && navigate("/to-do");
+  }, [token, navigate]);
+
+  //if (loading) return <div>Loading...</div>;
 
   return (
     <main className="main-container container d-flex align-items-center justify-content-center">

@@ -53,6 +53,9 @@ const RegistrationForm = ({
             required
           />
           <div className="text-danger">{getError?.email}</div>
+          {getError.message && (
+            <div className="text-danger">{getError?.message}</div>
+          )}
         </div>
         <div className="mb-2">
           <label htmlFor="password" className="form-label">

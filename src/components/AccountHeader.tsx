@@ -1,11 +1,15 @@
 import { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import AuthContext from "../auth/AuthContext";
+import { logout } from "../services/api/api-calls";
 
 const AccountHeader = () => {
   const { setToken } = useContext(AuthContext);
 
-  const logout = () => setToken(undefined);
+  const handleLogout = () => {
+    logout();
+    setToken(undefined);
+  };
 
   return (
     <header className="bg-body-tertiary">
@@ -16,7 +20,7 @@ const AccountHeader = () => {
         <NavLink to="new-todo" className="link-info fs-3" role="button">
           New Todo
         </NavLink>
-        <button onClick={logout} className="btn btn-warning" role="button">
+        <button onClick={handleLogout} className="btn btn-warning" role="button">
           Logout
         </button>
       </nav>

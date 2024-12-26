@@ -1,14 +1,46 @@
+import { SetTokenFunction } from "../../auth/AuthContext.js";
 import { Todo } from "../../pages/private/types.js";
 import { LoginCredentials, User } from "../../pages/public/types.js";
-import { SetTokenFunction } from "../../auth/AuthContext.js";
 import {
   AUTHORIZATION,
   CONTENT_TYPE,
-  validateToken,
   setHeader,
+  validateToken,
 } from "./utility.js";
 
-const BASE_URL = import.meta.env.VITE_APP_API_URL; 
+const BASE_URL = import.meta.env.VITE_APP_API_URL;
+
+export async function logout() {
+  try {
+    await fetch(
+      new Request(`${BASE_URL}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      })
+    );
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function refreshTokenRequest(): Promise<string> {
+  try {
+    const response = await fetch(
+      new Request(`${BASE_URL}/auth/refresh`, {
+        method: "POST",
+        credentials: "include",
+      })
+    );
+    const statusCode = response.status;
+    if (statusCode === 200) {
+      const token = response.headers.get(AUTHORIZATION);
+      if (token) return token;
+    }
+    throw await response.json();
+  } catch (error) {
+    throw error;
+  }
+}
 
 export async function postOrPutRequest<T>(
   url: string,
@@ -17,24 +49,31 @@ export async function postOrPutRequest<T>(
   token: string | undefined = undefined,
   method: "POST" | "PUT" = "POST"
 ): Promise<T | void> {
-  
   try {
     const response = await fetch(
       new Request(`${BASE_URL}${url}`, {
         method: method,
+        credentials: "include",
         headers: setHeader(
-          new Map([[CONTENT_TYPE, "application/json"]]),token
+          new Map([[CONTENT_TYPE, "application/json"]]),
+          token
         ),
         body: JSON.stringify(data),
       })
     );
+    const statusCode = response.status;
 
-    if (response.status === 400) {
+    if (statusCode === 400) {
       const rawData: T = await response.json();
       throw rawData;
     }
-    const authHeader = response.headers.get(AUTHORIZATION);
-    authHeader && validateAndSetToken(authHeader, setToken!);
+
+    if (statusCode === 201 || statusCode === 200) {
+      const authHeader = response.headers.get(AUTHORIZATION);
+      if (authHeader && setToken) {
+        validateAndSetToken(authHeader, setToken);
+      }
+    } else throw new Error(`Server side error status code:${statusCode}`);
   } catch (exception) {
     throw exception;
   }

@@ -1,5 +1,5 @@
 /**
- * Utility class, represents the http header enum.
+ * API utility, represents the http header enum.
  */
 
 export const AUTHORIZATION = "Authorization";

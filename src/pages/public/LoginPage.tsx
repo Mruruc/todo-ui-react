@@ -1,13 +1,13 @@
-import { ChangeEvent, useContext, useState } from "react";
+import { ChangeEvent, useContext, useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { postOrPutRequest } from "../../services/api/api-calls.js";
 import AuthContext from "../../auth/AuthContext.js";
-import { LoginCredentials, ValidationError } from "./types.js";
+import { postOrPutRequest } from "../../services/api/api-calls.js";
 import LoginForm from "./components/LoginForm.js";
+import { LoginCredentials, ValidationError } from "./types.js";
 
 const URI = "/auth/authenticate";
 const LoginPage = () => {
-  const { setToken } = useContext(AuthContext);
+  const { setToken, token, loading } = useContext(AuthContext);
   const navigate = useNavigate();
   const [getError, setError] = useState<ValidationError>({});
 
@@ -30,10 +30,14 @@ const LoginPage = () => {
     event.preventDefault();
     postOrPutRequest<ValidationError>(URI, getCredential, setToken)
       .then(() => navigate("/to-do", { replace: true }))
-      .catch((exception) =>
-        exception.errors ? setError(exception.errors) : setError(exception)
-      );
+      .catch((error) => setError(error));
   }
+
+  useEffect(() => {
+    token && navigate("/to-do");
+  }, [token, navigate]);
+
+  if (loading) return <div>Loading...</div>;
 
   return (
     <main className="main-container d-flex flex-column">
@@ -43,10 +47,8 @@ const LoginPage = () => {
             Do not have an Account?
           </NavLink>
           <h2 className="text-center mb-4">Login</h2>
-          {getError?.description && (
-            <div className="text-danger pb-2 btn fs-5">
-              {getError.description}
-            </div>
+          {getError?.message && (
+            <div className="text-danger pb-2 btn fs-5">{getError.message}</div>
           )}
           <LoginForm
             getCredential={getCredential}
